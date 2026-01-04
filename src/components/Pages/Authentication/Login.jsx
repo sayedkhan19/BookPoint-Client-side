@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { NavLink } from "react-router";
 
 const Login = () => {
   const {
@@ -135,9 +136,9 @@ const Login = () => {
         {/* Register */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Don’t have an account?{" "}
-          <a href="#" className="text-indigo-600 hover:underline">
+          <NavLink to={"/register"}><a href="#" className="text-indigo-600 hover:underline">
             Register
-          </a>
+          </a></NavLink>
         </p>
       </div>
     </div>

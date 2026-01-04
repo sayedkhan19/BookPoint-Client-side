@@ -18,7 +18,7 @@ const AuthLayout = () => {
 
       {/* Main Auth Section */}
       <div className="flex flex-1 items-center justify-center px-4">
-        <div className="w-full max-w-5xl rounded-xl shadow-lg overflow-hidden">
+        <div className="w-full max-w-5xl rounded-xl  overflow-hidden">
 
           <div className="flex flex-col lg:flex-row">
 
