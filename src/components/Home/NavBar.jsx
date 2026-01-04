@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router';
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);
@@ -66,7 +67,7 @@ const NavBar = () => {
 
             <a href="#" className="hover:text-indigo-600">Cart</a>
             <a href="#" className="block hover:text-indigo-600">Add Book</a>
-            <a href="#" className="hover:text-indigo-600">Login</a>
+            <NavLink to="/login"> <a href="#" className="hover:text-indigo-600">Login</a> </NavLink>
           </div>
         </div>
       </div>
