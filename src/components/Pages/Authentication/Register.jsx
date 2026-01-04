@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router";
+import useAuth from "../../useAuth";
 
 const Register = () => {
+    const {createUser,googleLogin} = useAuth();
   const {
     register,
     handleSubmit,
@@ -12,14 +14,29 @@ const Register = () => {
 
   const password = watch("password");
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const onSubmit = (data) => {
-    // Firebase createUserWithEmailAndPassword later
     console.log("Register Data:", data);
-    alert("Account created successfully (Firebase will be added later)");
+    createUser(data.email, data.password)
+    .then(result => {
+        console.log(result.user,"User are created");
+    })
+    .catch(error => {
+        console.error(error)
+    })
+    
   };
 
   const handleGoogleRegister = () => {
-    alert("Google signup (Firebase will be added later)");
+    googleLogin()
+    .then(result =>{
+        console.log(result.user)
+    })
+    .catch(error => {
+        console.log(error)
+    })
   };
 
   return (
@@ -33,8 +50,31 @@ const Register = () => {
         Join BookPoint and start reading
       </p>
 
-      {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+        {/* Name */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Full Name
+          </label>
+          <input
+            type="text"
+            placeholder="Your full name"
+            {...register("name", {
+              required: "Name is required",
+              minLength: {
+                value: 3,
+                message: "Name must be at least 3 characters",
+              },
+            })}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          {errors.name && (
+            <p className="text-sm text-red-600 mt-1">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
 
         {/* Email */}
         <div>
@@ -65,18 +105,31 @@ const Register = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Password
           </label>
-          <input
-            type="password"
-            placeholder="Minimum 6 characters"
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
-              },
-            })}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Minimum 6 characters"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
+              className="w-full px-4 py-2 border rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+
+            {/* Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2.5 text-gray-500 hover:text-indigo-600"
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
+
           {errors.password && (
             <p className="text-sm text-red-600 mt-1">
               {errors.password.message}
@@ -89,16 +142,29 @@ const Register = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Confirm Password
           </label>
-          <input
-            type="password"
-            placeholder="Re-enter password"
-            {...register("confirmPassword", {
-              required: "Please confirm your password",
-              validate: (value) =>
-                value === password || "Passwords do not match",
-            })}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Re-enter password"
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
+              className="w-full px-4 py-2 border rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+
+            {/* Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-2.5 text-gray-500 hover:text-indigo-600"
+            >
+              {showConfirmPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
+
           {errors.confirmPassword && (
             <p className="text-sm text-red-600 mt-1">
               {errors.confirmPassword.message}
@@ -140,9 +206,12 @@ const Register = () => {
       {/* Login Link */}
       <p className="text-center text-sm text-gray-500 mt-6">
         Already have an account?{" "}
-        <NavLink to={"/login"}><a href="/auth/login" className="text-indigo-600 hover:underline">
+        <NavLink
+          to="/login"
+          className="text-indigo-600 hover:underline"
+        >
           Login
-        </a></NavLink>
+        </NavLink>
       </p>
     </div>
   );
