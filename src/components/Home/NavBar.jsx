@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 
 const NavBar = () => {
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [mobileCatOpen, setMobileCatOpen] = useState(false);
 
   return (
     <nav className="bg-white border-b shadow-sm fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Main Navbar */}
         <div className="flex items-center justify-between h-16">
           
-          {/* Left: Mobile Menu Icon + Logo */}
+          {/* Left */}
           <div className="flex items-center gap-3">
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setOpen(!open)}
               className="md:hidden text-gray-700 focus:outline-none"
@@ -27,13 +26,12 @@ const NavBar = () => {
               )}
             </button>
 
-            {/* Logo */}
             <h1 className="text-xl font-bold text-indigo-600">
               📚 BookPoint
             </h1>
           </div>
 
-          {/* Center: Search (Desktop only) */}
+          {/* Search */}
           <div className="hidden md:block w-1/2">
             <input
               type="text"
@@ -42,11 +40,32 @@ const NavBar = () => {
             />
           </div>
 
-          {/* Right: Desktop Menu */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
             <a href="#" className="hover:text-indigo-600">Home</a>
-            <a href="#" className="hover:text-indigo-600">Categories</a>
+
+            {/* Desktop Categories */}
+            <div className="relative group">
+              <button className="hover:text-indigo-600 flex items-center gap-1">
+                Categories
+                <svg className="w-4 h-4 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div className="absolute left-0 top-full mt-2 w-44 bg-white border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <ul className="py-2 text-sm">
+                  <li><a href="#" className="block px-4 py-2 hover:bg-indigo-50">Fiction</a></li>
+                  <li><a href="#" className="block px-4 py-2 hover:bg-indigo-50">Non-Fiction</a></li>
+                  <li><a href="#" className="block px-4 py-2 hover:bg-indigo-50">Programming</a></li>
+                  <li><a href="#" className="block px-4 py-2 hover:bg-indigo-50">Academic</a></li>
+                  <li><a href="#" className="block px-4 py-2 hover:bg-indigo-50">Kids</a></li>
+                </ul>
+              </div>
+            </div>
+
             <a href="#" className="hover:text-indigo-600">Cart</a>
+            <a href="#" className="block hover:text-indigo-600">Add Book</a>
             <a href="#" className="hover:text-indigo-600">Login</a>
           </div>
         </div>
@@ -56,7 +75,7 @@ const NavBar = () => {
       {open && (
         <div className="md:hidden bg-white border-t shadow-lg">
           <div className="px-4 py-3 space-y-3 text-gray-700">
-            
+
             <input
               type="text"
               placeholder="Search books..."
@@ -64,8 +83,36 @@ const NavBar = () => {
             />
 
             <a href="#" className="block hover:text-indigo-600">Home</a>
-            <a href="#" className="block hover:text-indigo-600">Categories</a>
+
+            {/* Mobile Categories Toggle */}
+            <button
+              onClick={() => setMobileCatOpen(!mobileCatOpen)}
+              className="w-full flex items-center justify-between hover:text-indigo-600"
+            >
+              Categories
+              <svg
+                className={`w-4 h-4 transition-transform ${mobileCatOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {mobileCatOpen && (
+              <div className="ml-4 space-y-2 text-sm">
+                <a href="#" className="block hover:text-indigo-600">Fiction</a>
+                <a href="#" className="block hover:text-indigo-600">Non-Fiction</a>
+                <a href="#" className="block hover:text-indigo-600">Programming</a>
+                <a href="#" className="block hover:text-indigo-600">Academic</a>
+                <a href="#" className="block hover:text-indigo-600">Kids</a>
+              </div>
+            )}
+
             <a href="#" className="block hover:text-indigo-600">Cart</a>
+            <a href="#" className="block hover:text-indigo-600">Add Book</a>
             <a href="#" className="block hover:text-indigo-600">Login</a>
           </div>
         </div>
