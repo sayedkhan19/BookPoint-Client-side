@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
+import axiosPublic from "../../Axios/axiosPublic";
+import toast from "react-hot-toast";
+import useAuth from "../useAuth";
 
 const BookDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [book, setBook] = useState(null);
 
   useEffect(() => {
@@ -18,6 +24,34 @@ const BookDetails = () => {
       </div>
     );
   }
+
+  // ✅ ADD TO CART HANDLER
+  const handleAddToCart = () => {
+    if (!user) {
+      toast.error("Please login first");
+      navigate("/login");
+      return;
+    }
+
+    const cartItem = {
+      userId: user.uid,
+      email: user.email,
+      bookId: book._id,
+      name: book.name,
+      price: book.price,
+      cover: book.cover,
+      quantity: 1,
+      addedAt: new Date(),
+    };
+
+    axiosPublic.post("/cart", cartItem)
+      .then(() => {
+        toast.success("Added to cart 🛒");
+      })
+      .catch(() => {
+        toast.error("Failed to add to cart");
+      });
+  };
 
   return (
     <div className="bg-gray-50 py-32 px-4">
@@ -72,13 +106,16 @@ const BookDetails = () => {
                   In Stock ({book.stock})
                 </span>
               ) : (
-                <span className="text-red-500 font-semibold">Out of Stock</span>
+                <span className="text-red-500 font-semibold">
+                  Out of Stock
+                </span>
               )}
             </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
+                onClick={handleAddToCart}
                 disabled={book.stock === 0}
                 className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-500 transition disabled:opacity-60"
               >

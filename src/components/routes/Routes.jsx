@@ -8,6 +8,8 @@ import Register from "../Pages/Authentication/Register";
 import AddBook from "../Dashboard/AddBook";
 import BookDetails from "../bookDetails page/BookDetails";
 import CategoryBooks from "../Dashboard/CategoryBooks";
+import OrderPage from "../../Order/OrderPage";
+import MyBooks from "../Dashboard/MyBooks ";
 
 
 export const router = createBrowserRouter([
@@ -31,6 +33,14 @@ export const router = createBrowserRouter([
         {
           path: "/category/:category",
           Component: CategoryBooks,
+        },
+        {
+          path:"/order/:id",
+          Component: OrderPage,
+        },
+        {
+          path: "/my-books",
+          Component: MyBooks,
         }
     ]
     

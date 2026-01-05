@@ -83,7 +83,7 @@ const NavBar = () => {
               </div>
             </div>
 
-            <NavLink to="/cart" className={linkClass}>
+            <NavLink to="/my-books" className={linkClass}>
               Cart
             </NavLink>
 
@@ -154,7 +154,7 @@ const NavBar = () => {
               </div>
             )}
 
-            <NavLink to="/cart" className="block">Cart</NavLink>
+            <NavLink to="/my-books" className="block">Cart</NavLink>
 
             {/* Mobile More */}
             <button

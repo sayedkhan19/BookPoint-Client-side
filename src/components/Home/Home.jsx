@@ -1,6 +1,7 @@
 import React from 'react';
 import HomeBanner from './HomeBanner';
 import PopularBooks from './PopularBooks';
+import AllBooks from './AllBooks';
 
 const Home = () => {
     return (
@@ -11,6 +12,10 @@ const Home = () => {
 
             <section>
                 <PopularBooks></PopularBooks>
+            </section>
+
+            <section>
+                <AllBooks></AllBooks>
             </section>
 
 
