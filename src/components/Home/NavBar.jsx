@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router";
 import useAuth from "../useAuth";
+import toast from "react-hot-toast";
 
 const NavBar = () => {
   const { user, logOut } = useAuth();
@@ -9,10 +10,15 @@ const NavBar = () => {
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const handleLogout = () => {
-    logOut()
-      .then(() => console.log("Logged out"))
-      .catch((err) => console.error(err.message));
-  };
+  logOut()
+    .then(() => {
+      toast.success("Logged out successfully 👋");
+    })
+    .catch((err) => {
+      toast.error(err.message);
+    });
+};
+
 
   const linkClass = ({ isActive }) =>
     isActive

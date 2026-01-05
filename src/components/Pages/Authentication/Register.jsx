@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../useAuth";
+import toast from "react-hot-toast";
 
 const Register = () => {
     const {createUser,googleLogin} = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -21,9 +25,12 @@ const Register = () => {
     console.log("Register Data:", data);
     createUser(data.email, data.password)
     .then(result => {
+      toast.success("Siginin successfull")
+      navigate(from)
         console.log(result.user,"User are created");
     })
     .catch(error => {
+      toast.error("faild signin!")
         console.error(error)
     })
     
@@ -32,9 +39,12 @@ const Register = () => {
   const handleGoogleRegister = () => {
     googleLogin()
     .then(result =>{
+      toast.success("Sign Up successfully")
+      navigate(from)
         console.log(result.user)
     })
     .catch(error => {
+      toast.error("faild!")
         console.log(error)
     })
   };
