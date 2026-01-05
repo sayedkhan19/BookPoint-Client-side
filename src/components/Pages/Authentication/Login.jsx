@@ -1,29 +1,42 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router";
+import useAuth from "../../useAuth";
 
 const Login = () => {
+    const {googleLogin,signIn} = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    // Firebase auth will be added later
-    console.log("Login Data:", data);
+const onSubmit = (data) => {
+  signIn(data.email, data.password)
+    .then((result) => {
+      console.log("Logged in user:", result.user);
+      // redirect later
+    })
+    .catch((error) => {
+      if (error.code === "auth/wrong-password") {
+        alert("Incorrect password. Please try again.");
+      } else if (error.code === "auth/user-not-found") {
+        alert("No account found with this email.");
+      } else {
+        alert(error.message);
+      }
+    });
+};
 
-    // Temporary fake check
-    if (data.password.length < 6) {
-      alert("Wrong password (Firebase will handle this later)");
-      return;
-    }
-
-    alert("Login successful (Firebase will be added later)");
-  };
 
   const handleGoogleLogin = () => {
-    alert("Google login (Firebase will be added later)");
+    googleLogin()
+    .then(result =>{
+        console.log(result.user)
+    })
+    .catch(error => {
+        console.log(error)
+    })
   };
 
   const handleForgotPassword = () => {
