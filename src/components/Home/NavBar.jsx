@@ -10,15 +10,10 @@ const NavBar = () => {
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const handleLogout = () => {
-  logOut()
-    .then(() => {
-      toast.success("Log out successfully 👋");
-    })
-    .catch((err) => {
-      toast.error(err.message);
-    });
-};
-
+    logOut()
+      .then(() => toast.success("Logged out successfully 👋"))
+      .catch((err) => toast.error(err.message));
+  };
 
   const linkClass = ({ isActive }) =>
     isActive
@@ -44,23 +39,14 @@ const NavBar = () => {
             </NavLink>
           </div>
 
-          {/* Search
-          <div className="hidden md:block w-1/2">
-            <input
-              type="text"
-              placeholder="Search books..."
-              className="w-full px-4 py-2 border rounded-full focus:ring-2 focus:ring-indigo-500"
-            />
-          </div> */}
-
-          {/* ================= Desktop Menu ================= */}
+          {/* ================= DESKTOP MENU ================= */}
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
 
             <NavLink to="/" className={linkClass}>
               Home
             </NavLink>
 
-            {/* ✅ Categories Dropdown (FIXED) */}
+            {/* Categories Dropdown */}
             <div className="relative group">
               <span className="flex items-center gap-1 cursor-pointer text-gray-700 hover:text-indigo-600">
                 Categories
@@ -69,12 +55,31 @@ const NavBar = () => {
                 </svg>
               </span>
 
-              <div className="absolute left-0 top-full mt-2 w-44 bg-white border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Fiction</NavLink>
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Non-Fiction</NavLink>
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Programming</NavLink>
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Academic</NavLink>
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Kids</NavLink>
+              <div className="absolute left-0 top-full mt-2 w-48 bg-white border rounded-lg shadow-lg 
+                              opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                              transition-all duration-200 z-50">
+
+                {[
+                  "Fiction",
+                  "Non-Fiction",
+                  "Programming",
+                  "Academic",
+                  "Kids",
+                ].map((cat) => (
+                  <NavLink
+                    key={cat}
+                    to={`/category/${cat}`}
+                    className={({ isActive }) =>
+                      `block px-4 py-2 text-sm ${
+                        isActive
+                          ? "bg-indigo-50 text-indigo-600 font-semibold"
+                          : "hover:bg-indigo-50"
+                      }`
+                    }
+                  >
+                    {cat}
+                  </NavLink>
+                ))}
               </div>
             </div>
 
@@ -82,7 +87,7 @@ const NavBar = () => {
               Cart
             </NavLink>
 
-            {/* ✅ More Dropdown */}
+            {/* More Dropdown */}
             <div className="relative group">
               <span className="flex items-center gap-1 cursor-pointer text-gray-700 hover:text-indigo-600">
                 More
@@ -91,18 +96,27 @@ const NavBar = () => {
                 </svg>
               </span>
 
-              <div className="absolute left-0 top-full mt-2 w-40 bg-white border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <NavLink to="/addbooks" className="block px-4 py-2 hover:bg-indigo-50">Add Book</NavLink>
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Wishlist</NavLink>
-                <NavLink className="block px-4 py-2 hover:bg-indigo-50">Orders</NavLink>
+              <div className="absolute left-0 top-full mt-2 w-44 bg-white border rounded-lg shadow-lg 
+                              opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                              transition-all duration-200 z-50">
+
+                <NavLink to="/addbooks" className="block px-4 py-2 hover:bg-indigo-50">
+                  Add Book
+                </NavLink>
+                <NavLink className="block px-4 py-2 hover:bg-indigo-50">
+                  Wishlist
+                </NavLink>
+                <NavLink className="block px-4 py-2 hover:bg-indigo-50">
+                  Orders
+                </NavLink>
               </div>
             </div>
 
-            {/* ✅ Auth Conditional */}
+            {/* Auth */}
             {user ? (
               <button
                 onClick={handleLogout}
-                className="text-red-600 hover:underline cursor-pointer"
+                className="text-red-600 hover:underline"
               >
                 Logout
               </button>
@@ -115,14 +129,14 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* ================= Mobile Menu ================= */}
+      {/* ================= MOBILE MENU ================= */}
       {open && (
         <div className="md:hidden bg-white border-t shadow">
           <div className="p-4 space-y-3 text-sm">
 
             <NavLink to="/" className="block">Home</NavLink>
 
-            {/* Categories */}
+            {/* Mobile Categories */}
             <button
               onClick={() => setMobileCatOpen(!mobileCatOpen)}
               className="w-full flex justify-between"
@@ -132,17 +146,17 @@ const NavBar = () => {
 
             {mobileCatOpen && (
               <div className="ml-4 space-y-2">
-                <NavLink className="block">Fiction</NavLink>
-                <NavLink className="block">Non-Fiction</NavLink>
-                <NavLink className="block">Programming</NavLink>
-                <NavLink className="block">Academic</NavLink>
-                <NavLink className="block">Kids</NavLink>
+                {["Fiction","Non-Fiction","Programming","Academic","Kids"].map(cat => (
+                  <NavLink key={cat} to={`/category/${cat}`} className="block py-1">
+                    {cat}
+                  </NavLink>
+                ))}
               </div>
             )}
 
             <NavLink to="/cart" className="block">Cart</NavLink>
 
-            {/* More */}
+            {/* Mobile More */}
             <button
               onClick={() => setMobileMoreOpen(!mobileMoreOpen)}
               className="w-full flex justify-between"
@@ -152,7 +166,7 @@ const NavBar = () => {
 
             {mobileMoreOpen && (
               <div className="ml-4 space-y-2">
-                <NavLink to="/add-book" className="block">Add Book</NavLink>
+                <NavLink to="/addbooks" className="block">Add Book</NavLink>
                 <NavLink className="block">Wishlist</NavLink>
                 <NavLink className="block">Orders</NavLink>
               </div>
@@ -162,12 +176,12 @@ const NavBar = () => {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="text-red-600 block cursor-pointer"
+                className="text-red-600 block"
               >
                 Logout
               </button>
             ) : (
-              <NavLink to="/auth/login" className="block cursor-pointer">
+              <NavLink to="/login" className="block">
                 Login
               </NavLink>
             )}
