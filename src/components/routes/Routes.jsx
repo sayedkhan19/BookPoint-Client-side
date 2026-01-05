@@ -5,6 +5,7 @@ import NotFound from "../ErrorElement/NotFound";
 import AuthLayout from "../Layout/AuthLayout";
 import Login from "../Pages/Authentication/Login";
 import Register from "../Pages/Authentication/Register";
+import AddBook from "../Dashboard/AddBook";
 
 
 export const router = createBrowserRouter([
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
         {
             index: true,
             Component: Home,
+        },
+        {
+          path: "/addbooks",
+          Component: AddBook,
         }
     ]
     

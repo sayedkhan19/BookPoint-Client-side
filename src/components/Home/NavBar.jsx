@@ -12,7 +12,7 @@ const NavBar = () => {
   const handleLogout = () => {
   logOut()
     .then(() => {
-      toast.success("Logged out successfully 👋");
+      toast.success("Log out successfully 👋");
     })
     .catch((err) => {
       toast.error(err.message);
@@ -44,14 +44,14 @@ const NavBar = () => {
             </NavLink>
           </div>
 
-          {/* Search */}
+          {/* Search
           <div className="hidden md:block w-1/2">
             <input
               type="text"
               placeholder="Search books..."
               className="w-full px-4 py-2 border rounded-full focus:ring-2 focus:ring-indigo-500"
             />
-          </div>
+          </div> */}
 
           {/* ================= Desktop Menu ================= */}
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -92,7 +92,7 @@ const NavBar = () => {
               </span>
 
               <div className="absolute left-0 top-full mt-2 w-40 bg-white border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <NavLink to="/add-book" className="block px-4 py-2 hover:bg-indigo-50">Add Book</NavLink>
+                <NavLink to="/addbooks" className="block px-4 py-2 hover:bg-indigo-50">Add Book</NavLink>
                 <NavLink className="block px-4 py-2 hover:bg-indigo-50">Wishlist</NavLink>
                 <NavLink className="block px-4 py-2 hover:bg-indigo-50">Orders</NavLink>
               </div>
