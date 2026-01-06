@@ -2,6 +2,9 @@ import React from 'react';
 import HomeBanner from './HomeBanner';
 import PopularBooks from './PopularBooks';
 import AllBooks from './AllBooks';
+import WhyChooseUs from './WhyChooseUs';
+import HomeCategories from './HomeCategories';
+import Newsletter from './Newsletter';
 
 const Home = () => {
     return (
@@ -16,6 +19,18 @@ const Home = () => {
 
             <section>
                 <AllBooks></AllBooks>
+            </section>
+
+            <section>
+                <WhyChooseUs></WhyChooseUs>
+            </section>
+
+            <section>
+                <HomeCategories></HomeCategories>
+            </section>
+
+            <section>
+                <Newsletter></Newsletter>
             </section>
 
 
