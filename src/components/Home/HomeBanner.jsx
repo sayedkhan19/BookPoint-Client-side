@@ -3,7 +3,7 @@ import bannerImg from "../../assets/713.jpg"; // use your image
 
 const HomeBanner = () => {
   return (
-    <section className="bg-gradient-to-r from-indigo-50 to-white pt-24">
+    <section className="bg-gradient-to-r from-indigo-50 to-white pt-14">
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="flex flex-col-reverse md:flex-row items-center gap-10">
 
