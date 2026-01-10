@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import axiosPublic from "../../Axios/axiosPublic";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import useAuth from "../useAuth";
 
 const BookDetails = () => {
@@ -10,32 +10,39 @@ const BookDetails = () => {
   const { user } = useAuth();
 
   const [book, setBook] = useState(null);
+  const [adding, setAdding] = useState(false);
 
+  /* ================= FETCH BOOK ================= */
   useEffect(() => {
-    fetch(`http://localhost:5000/books/${id}`)
-      .then((res) => res.json())
-      .then((data) => setBook(data));
+    axiosPublic.get(`/books/${id}`).then((res) => {
+      setBook(res.data);
+    });
   }, [id]);
 
   if (!book) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg font-medium text-gray-500">Loading book...</p>
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Loading book...
       </div>
     );
   }
 
-  // ✅ ADD TO CART HANDLER
-  const handleAddToCart = () => {
+  /* ================= ADD TO CART ================= */
+  const handleAddToCart = async () => {
     if (!user) {
-      toast.error("Please login first");
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to add books to cart",
+      });
       navigate("/login");
       return;
     }
 
+    // 🔥 SAME STRUCTURE AS ALL OTHER PAGES
     const cartItem = {
       userId: user.uid,
-      email: user.email,
+      userEmail: user.email, // ✅ MUST MATCH
       bookId: book._id,
       name: book.name,
       price: book.price,
@@ -44,33 +51,46 @@ const BookDetails = () => {
       addedAt: new Date(),
     };
 
-    axiosPublic.post("/cart", cartItem)
-      .then(() => {
-        toast.success("Added to cart 🛒");
-      })
-      .catch(() => {
-        toast.error("Failed to add to cart");
+    try {
+      setAdding(true);
+      await axiosPublic.post("/cart", cartItem);
+
+      Swal.fire({
+        icon: "success",
+        title: "Added to Cart 🛒",
+        text: `${book.name} added successfully`,
+        timer: 1500,
+        showConfirmButton: false,
       });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed",
+        text: "Could not add to cart",
+      });
+    } finally {
+      setAdding(false);
+    }
   };
 
   return (
-    <div className="bg-gray-50 py-32 px-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+    <div className="bg-gray-50 py-24 px-4">
+      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-6 sm:p-8">
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-          {/* Book Image */}
+          {/* Image */}
           <div className="flex justify-center">
             <img
               src={book.cover}
               alt={book.name}
-              className="w-full max-w-sm h-96 object-cover rounded-xl border"
+              className="w-full max-w-sm h-80 object-cover rounded-xl border"
             />
           </div>
 
-          {/* Book Info */}
+          {/* Info */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">
               {book.name}
             </h2>
 
@@ -78,27 +98,14 @@ const BookDetails = () => {
               by <span className="font-medium">{book.author}</span>
             </p>
 
-            {/* Rating */}
-            <div className="flex items-center gap-3 mb-4">
-              <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium">
-                ⭐ {book.rating?.average || 0}
-              </span>
-              <span className="text-sm text-gray-500">
-                ({book.rating?.count || 0} reviews)
-              </span>
-            </div>
-
-            {/* Price */}
             <p className="text-2xl font-bold text-indigo-600 mb-4">
               ${book.price}
             </p>
 
-            {/* Details */}
-            <p className="text-gray-700 leading-relaxed mb-6">
+            <p className="text-gray-700 mb-6">
               {book.details}
             </p>
 
-            {/* Stock */}
             <p className="mb-6 text-sm">
               Availability:{" "}
               {book.stock > 0 ? (
@@ -112,25 +119,14 @@ const BookDetails = () => {
               )}
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={handleAddToCart}
-                disabled={book.stock === 0}
-                className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-500 transition disabled:opacity-60"
-              >
-                🛒 Add to Cart
-              </button>
-
-              <button
-                disabled={book.stock === 0}
-                className="flex-1 border-2 border-indigo-600 text-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition disabled:opacity-60"
-              >
-                ⚡ Order Now
-              </button>
-            </div>
+            <button
+              onClick={handleAddToCart}
+              disabled={adding || book.stock === 0}
+              className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-500 disabled:opacity-60"
+            >
+              🛒 {adding ? "Adding..." : "Add to Cart"}
+            </button>
           </div>
-
         </div>
       </div>
     </div>
