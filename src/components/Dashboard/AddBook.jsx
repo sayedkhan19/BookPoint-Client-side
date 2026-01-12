@@ -62,7 +62,7 @@ const AddBook = () => {
         createdAt: new Date(),
       };
 
-      const res = await fetch("http://localhost:5000/books", {
+      const res = await fetch("https://book-point-server.vercel.app/books", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(bookInfo),

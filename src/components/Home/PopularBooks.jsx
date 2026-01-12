@@ -10,7 +10,7 @@ const PopularBooks = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/books/popular")
+    fetch("https://book-point-server.vercel.app/books/popular")
       .then((res) => res.json())
       .then((data) => setBooks(data));
   }, []);
