@@ -10,6 +10,7 @@ import BookDetails from "../bookDetails page/BookDetails";
 import CategoryBooks from "../Dashboard/CategoryBooks";
 import OrderPage from "../../Order/OrderPage";
 import MyBooks from "../Dashboard/MyBooks ";
+import AllBookBrowse from "../Home/AllBookBrowse";
 
 
 export const router = createBrowserRouter([
@@ -41,7 +42,11 @@ export const router = createBrowserRouter([
         {
           path: "/my-books",
           Component: MyBooks,
-        }
+        },
+        {
+          path: "/all-books",
+          Component: AllBookBrowse,
+             },
     ]
     
     

@@ -49,7 +49,7 @@ const CategoryBooks = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-32 px-4">
+    <div className="bg-gray-50 min-h-screen py-10 px-4">
       <div className="max-w-7xl mx-auto">
 
         {/* Title */}
