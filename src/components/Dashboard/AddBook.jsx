@@ -136,11 +136,11 @@ const AddBook = () => {
 
           {/* Category */}
           <div className="md:col-span-2">
-            <label className="label">Category</label>
-            <select {...register("category", { required: true })} className="input">
-              <option value="">Select Category</option>
+            <label className="label ">Category</label>
+            <select  {...register("category", { required: true })} className="input cursor-pointer">
+              <option className="cursor-pointer" value="">Select Category</option>
               {categories.map((cat) => (
-                <option key={cat}>{cat}</option>
+                <option className="cursor-pointer" key={cat}>{cat}</option>
               ))}
             </select>
           </div>
@@ -161,7 +161,7 @@ const AddBook = () => {
                 accept="image/*"
                 {...register("cover", { required: true })}
                 onChange={(e) => setPreview(URL.createObjectURL(e.target.files[0]))}
-                className="block w-full text-sm"
+                className="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none py-2 px-3"
               />
 
               {preview && (

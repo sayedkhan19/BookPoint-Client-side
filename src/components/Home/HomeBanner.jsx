@@ -1,47 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import bannerImg from "../../assets/713.jpg";
 import { NavLink, useNavigate } from "react-router";
-import axiosPublic from "../../Axios/axiosPublic";
 
 const HomeBanner = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const boxRef = useRef(null);
 
   /* ================= LIVE SEARCH ================= */
   useEffect(() => {
-    if (query.trim().length < 2) {
-      setResults([]);
-      setShowDropdown(false);
+    if (query.trim().length === 0) {
+      setResults([]); 
+      setOpen(false);
       return;
     }
 
-    const timer = setTimeout(async () => {
-      try {
-        const res = await axiosPublic.get(
-          `/books/search?q=${query}`
-        );
-        setResults(res.data);
-        setShowDropdown(true);
-      } catch {
-        setResults([]);
-      }
-    }, 300);
+    const timer = setTimeout(() => {
+      fetch(`http://localhost:5000/books/search?q=${query}`)
+        .then(res => res.json())
+        .then(data => {
+          setResults(data);
+          setOpen(true);
+        })
+        .catch(() => {
+          setResults([]);
+          setOpen(false);
+        });
+    }, 300); // debounce
 
     return () => clearTimeout(timer);
   }, [query]);
 
-  /* ================= SEARCH BUTTON ================= */
-  const handleSearch = () => {
-    if (!query.trim()) return;
-    navigate(`/all-books?search=${query}`);
-    setShowDropdown(false);
-  };
+  /* ================= CLICK OUTSIDE ================= */
+  useEffect(() => {
+    const handler = (e) => {
+      if (boxRef.current && !boxRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   /* ================= SELECT BOOK ================= */
-  const handleSelectBook = (id) => {
-    setShowDropdown(false);
+  const handleSelect = (id) => {
+    setOpen(false);
     setQuery("");
     navigate(`/books/${id}`);
   };
@@ -59,44 +64,35 @@ const HomeBanner = () => {
             </h1>
 
             <p className="mt-4 text-gray-600">
-              Find books by title, author, or category instantly.
+              Search by book name or author
             </p>
 
-            {/* SEARCH */}
-            <div className="relative mt-6 max-w-lg mx-auto md:mx-0">
-              <div className="flex">
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onFocus={() => query && setShowDropdown(true)}
-                  placeholder="Search books or authors..."
-                  className="w-full px-4 py-3 border rounded-l-full focus:ring-2 focus:ring-indigo-500"
-                />
-
-                <button
-                  onClick={handleSearch}
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-r-full hover:bg-indigo-500"
-                >
-                  Search
-                </button>
-              </div>
+            {/* SEARCH BOX */}
+            <div ref={boxRef} className="relative mt-6 max-w-lg mx-auto md:mx-0">
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search books or authors..."
+                className="w-full px-5 py-3 border rounded-full focus:ring-2 focus:ring-indigo-500"
+              />
 
               {/* DROPDOWN */}
-              {showDropdown && (
-                <div className="absolute z-30 bg-white w-full mt-2 rounded-xl shadow-lg overflow-hidden">
+              {open && (
+                <div className="absolute z-40 w-full bg-white mt-2 rounded-xl shadow-xl overflow-hidden">
                   {results.length > 0 ? (
                     results.map((book) => (
                       <div
                         key={book._id}
-                        onClick={() => handleSelectBook(book._id)}
+                        onMouseDown={() => handleSelect(book._id)}
                         className="flex items-center gap-3 p-3 hover:bg-indigo-50 cursor-pointer"
                       >
                         <img
                           src={book.cover}
+                          alt={book.name}
                           className="w-10 h-14 object-cover rounded"
                         />
                         <div>
-                          <p className="font-medium text-sm">
+                          <p className="text-sm font-semibold">
                             {book.name}
                           </p>
                           <p className="text-xs text-gray-500">
@@ -107,7 +103,7 @@ const HomeBanner = () => {
                     ))
                   ) : (
                     <p className="p-4 text-sm text-gray-500">
-                      No results found
+                      No books found
                     </p>
                   )}
                 </div>
@@ -115,12 +111,12 @@ const HomeBanner = () => {
             </div>
 
             {/* CTA */}
-            <div className="mt-6 flex justify-center md:justify-start gap-4">
+            <div className="mt-6">
               <NavLink
                 to="/all-books"
-                className="px-6 py-3 bg-indigo-600 text-white rounded-md"
+                className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
               >
-                Browse Books
+                Browse All Books
               </NavLink>
             </div>
           </div>

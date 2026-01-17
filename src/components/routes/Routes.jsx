@@ -11,6 +11,10 @@ import CategoryBooks from "../Dashboard/CategoryBooks";
 import OrderPage from "../../Order/OrderPage";
 import MyBooks from "../Dashboard/MyBooks ";
 import AllBookBrowse from "../Home/AllBookBrowse";
+import OrderSuccess from "../Oerders_manages/OrderSuccess";
+import PaymentPage from "../Oerders_manages/PaymentPage";
+import MyOrders from "../Oerders_manages/MyOrders";
+import AdminOrders from "../Oerders_manages/AdminOrders";
 
 
 export const router = createBrowserRouter([
@@ -47,6 +51,22 @@ export const router = createBrowserRouter([
           path: "/all-books",
           Component: AllBookBrowse,
              },
+        {
+          path: "/order-success",
+          Component: OrderSuccess,
+        },
+        {
+          path: "/payment/:method",
+          Component: PaymentPage,
+        },
+        {
+          path: "/my-orders",
+          Component: MyOrders,
+        },
+        {
+          path:  "/admin/orders",
+          Component: AdminOrders,
+        }
     ]
     
     

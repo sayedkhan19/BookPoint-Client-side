@@ -56,6 +56,7 @@ const NavBar = () => {
 
             {/* ================= DESKTOP MENU ================= */}
             <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+                
 
               <NavLink to="/" className={linkClass}>
                 Home
@@ -110,12 +111,35 @@ const NavBar = () => {
                   <NavLink to="/addbooks" className="block px-4 py-2 hover:bg-indigo-50">
                     Add Book
                   </NavLink>
-                  <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
-                    Wishlist
+                  
+                  
+                  
+                  
+                  
+                  {/* <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
+                     <NavLink to={"/payment/:method"}>Order Success</NavLink>
                   </span>
                   <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
-                    Orders
+                   <NavLink to={"/order-success"}>Order Success</NavLink>
+                  </span> */}
+
+
+                   <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
+                    <NavLink to={"/my-orders"}>My-Order</NavLink>
                   </span>
+
+                   <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
+                  <NavLink to={"/admin/orders"}>Admin-Order</NavLink>
+                  </span>
+
+                  
+
+                
+                
+                
+                
+                
+                
                 </div>
               </div>
 
@@ -180,17 +204,43 @@ const NavBar = () => {
                 More <span>▾</span>
               </button>
 
+                
+                  
+                  
+                  
+
               {mobileMoreOpen && (
                 <div className="ml-4 space-y-2">
                   <NavLink to="/addbooks" className="block" onClick={closeMobileMenu}>
                     Add Book
                   </NavLink>
-                  <span className="block cursor-pointer" onClick={closeMobileMenu}>
-                    Wishlist
+            
+                   {/* <span className="block cursor-pointer" onClick={closeMobileMenu}>
+                    <NavLink to={"/payment/:method"}>Order Success</NavLink>
+                  </span> */}
+
+
+                  {/* <span className="block cursor-pointer" onClick={closeMobileMenu}>
+                    <NavLink to={"/payment/:method"}>Order Success</NavLink>
                   </span>
+
+
                   <span className="block cursor-pointer" onClick={closeMobileMenu}>
-                    Orders
+                  <NavLink to={"/order-success"}>Order Success</NavLink>
+                  </span> */}
+
+
+                  <span className="block cursor-pointer" onClick={closeMobileMenu}>
+                  <NavLink to={"/my-orders"}>My-Order</NavLink>
                   </span>
+
+
+                  
+                  <span className="block cursor-pointer" onClick={closeMobileMenu}>
+                  <NavLink to={"/admin/orders"}>Admin-Order</NavLink>
+                  </span>
+
+                  
                 </div>
               )}
 
