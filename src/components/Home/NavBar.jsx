@@ -113,9 +113,19 @@ const NavBar = () => {
                   </NavLink>
                   
                   
+
+
+                  <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
+                    <NavLink to={"/profile"}>Profile</NavLink>
+                   </span>
+{/*                   
+                   <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
+                    <NavLink to={"/admin/orders"}>Admin</NavLink>
+                   </span>
                   
+                   */}
                   
-                  
+                    {/* <NavLink to={"/payment/:method"}>Order Success</NavLink> */}
                   {/* <span className="block px-4 py-2 hover:bg-indigo-50 cursor-pointer">
                      <NavLink to={"/payment/:method"}>Order Success</NavLink>
                   </span>

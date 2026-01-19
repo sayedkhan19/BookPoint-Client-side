@@ -5,164 +5,85 @@ import useAuth from "../../useAuth";
 import toast from "react-hot-toast";
 
 const Login = () => {
-    const {googleLogin,signIn} = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { googleLogin, signIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
-const onSubmit = (data) => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  /* ================= EMAIL LOGIN ================= */
+  const onSubmit = (data) => {
     signIn(data.email, data.password)
-      .then((result) => {
-        toast.success("Login successful! 📚");
+      .then(() => {
+        toast.success("Login successful 📚");
         navigate(from, { replace: true });
-        console.log("Logged in user:", result.user);
-        // redirect later
       })
       .catch((error) => {
-        if (error.code === "auth/wrong-password") {
-          toast.error("Incorrect password");
-        } else if (error.code === "auth/user-not-found") {
-          toast.error("No account found with this email");
-        } else if (error.code === "auth/invalid-credential") {
-          toast.error("Invalid email or password");
-        } else {
-          toast.error(error.message);
-        }
+        toast.error("Invalid email or password");
       });
   };
 
+  /* ================= GOOGLE LOGIN ================= */
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await googleLogin();
+      const user = result.user;
 
-  const handleGoogleLogin = () => {
-    googleLogin()
-      .then((result) => {
-        toast.success("Logged in with Google 🎉");
-        navigate(from, { replace: true });
-        console.log(result.user);
-      })
-      .catch((error) => {
-        toast.error("Google login failed");
-        console.error(error);
+      // 🔥 save google user ONLY IF NOT EXISTS
+      await fetch("http://localhost:5000/users", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          provider: "google",
+        }),
       });
-  };
 
-  const handleForgotPassword = () => {
-    alert("Password reset email will be sent (Firebase later)");
+      toast.success("Logged in with Google 🎉");
+      navigate(from, { replace: true });
+    } catch (error) {
+      toast.error("Google login failed");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md  rounded-xl  p-6 sm:p-8">
+      <div className="w-full max-w-md bg-white p-6 rounded-xl">
 
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-center text-indigo-600 mb-2">
-          📚 BookPoint
+        <h2 className="text-2xl font-bold text-center text-indigo-600">
+          BookPoint Login
         </h2>
-        <p className="text-center text-gray-500 mb-6">
-          Login to your account
-        </p>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
+          <input
+            {...register("email", { required: true })}
+            placeholder="Email"
+            className="input"
+          />
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Invalid email address",
-                },
-              })}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            {errors.email && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+          <input
+            type="password"
+            {...register("password", { required: true })}
+            placeholder="Password"
+            className="input"
+          />
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            {errors.password && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          {/* Forgot Password */}
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="text-sm text-indigo-600 hover:underline"
-            >
-              Forgot password?
-            </button>
-          </div>
-
-          {/* Login Button */}
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-500 transition"
-          >
-            Login
-          </button>
+          <button className="btn-primary w-full">Login</button>
         </form>
 
-        {/* Divider */}
-        <div className="my-6 flex items-center">
-          <div className="flex-grow border-t"></div>
-          <span className="px-3 text-sm text-gray-500">OR</span>
-          <div className="flex-grow border-t"></div>
-        </div>
+        <div className="my-4 text-center">OR</div>
 
-        {/* Google Login */}
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-50 transition"
-        >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          <span className="text-sm font-medium">Continue with Google</span>
+        <button onClick={handleGoogleLogin} className="btn-outline w-full">
+          Continue with Google
         </button>
 
-        {/* Register */}
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center mt-4 text-sm">
           Don’t have an account?{" "}
-          <NavLink to={"/register"}><a href="#" className="text-indigo-600 hover:underline">
+          <NavLink to="/register" className="text-indigo-600">
             Register
-          </a></NavLink>
+          </NavLink>
         </p>
       </div>
     </div>

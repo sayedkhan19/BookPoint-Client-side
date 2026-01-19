@@ -15,6 +15,8 @@ import OrderSuccess from "../Oerders_manages/OrderSuccess";
 import PaymentPage from "../Oerders_manages/PaymentPage";
 import MyOrders from "../Oerders_manages/MyOrders";
 import AdminOrders from "../Oerders_manages/AdminOrders";
+import MyProfile from "../myProfile/MyProfile";
+import AdminRoute from "../myProfile/AdminRoute";
 
 
 export const router = createBrowserRouter([
@@ -66,7 +68,23 @@ export const router = createBrowserRouter([
         {
           path:  "/admin/orders",
           Component: AdminOrders,
-        }
+        },
+
+        {
+  path: "/profile",
+  Component: MyProfile,
+},
+
+{
+  path: "/admin/orders",
+  element: (
+    <AdminRoute>
+      <AdminOrders />
+    </AdminRoute>
+  ),
+}
+
+
     ]
     
     
